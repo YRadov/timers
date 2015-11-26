@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Timers</title>
+    
+ <style>
+ 
+ /* Страница */
+  * {
+	margin: 0;
+	padding: 0;
+}
+
+html,body {
+	width: 100%;
+	height: 100%;
+	background-color: #b7b7b7;
+}
+
+.fix {
+	width: 900px;
+	margin: 0 auto;
+	min-height: 100%;
+	background-color: white;
+	position: relative;
+}
+
+.header {
+	width: 100%;
+	height: 100px;
+	background-color: #cfe2f3;
+    text-align: center;
+    padding-top: 20px;
+    position: top;
+}
+
+.content {
+	padding: 20px 20px 70px;
+	overflow: hidden;
+}
+
+.leftCol {
+	float: left;
+	width: 180px;
+	background-color: #cccccc;
+	margin-right: 130px;
+	padding: 0px;
+}
+
+.main {
+	overflow: visible;
+    margin-top: 50px;
+}
+
+.footer {
+	width: 100%;
+	height: 50px;
+	background: #434343;
+	position: absolute;
+	bottom: 0;
+}
+
+ /* Заголовок */
+ 
+ h1 {
+    color: #FFF;
+    font-size: 50px;
+    
+ }
+
+ /* Меню */
+
+ul.menu {
+	margin: 0;
+	padding: 0;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	display: inline-block;
+	background-color: #3d3e40;
+	width: 190px;
+}
+
+ul.menu {
+	list-style: none; 
+	position: relative;
+}
+
+ul.menu li span {
+	padding: 10px 12px 12px;
+	color: white;
+	font-size: 13px;
+	font-weight: bold;
+	font-family: Arial;
+	text-decoration: none; 
+	display: block;
+	border-top: 1px solid #c4c4c4;
+}
+
+ul.menu li span {
+    transition: background-color 0.5s,
+    box-shadow 0.3s;
+}
+
+ul.menu li span:hover {
+	background-color: #b00000;
+    box-shadow: 5px 5px 5px gray;
+    cursor: pointer;
+}
+
+ul.menu li:first-child span {
+	border-top: none;
+}
+
+ul.menu li:first-child span:hover {
+	border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+}
+
+ul.menu li:last-child span:hover {
+	border-radius: 0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+}
+
+ /* Элемент для таймеров */ 
+ 
+ #square {
+    background-color: yellow;
+    height: 250px;
+    width: 250px;
+    text-align: center;
+    color: white;
+    font-size: 100px;
+    display: table-cell;
+    vertical-align: middle;
+    clear: both;
+ }
+
+ /* Предупреждение перед сбросом таймеров */ 
+ 
+ #alarm {
+    color: red;
+    font-size: 30px;
+    padding: 49px 227px;
+    display: none;
+    text-align: center;
+ } 
+ 
+ 
+ </style>
+  
+  <script>
+  
+var rot = 0;
+var timrot;
+var dir = 0;
+var timcolor;
+var col = 0;
+var coldir = 0;
+var timbl = 0;
+var timtim;
+var nTim;
+var tillres;
+var m = 0;
+var i = 1;
+var c; 
+var n = 0;
+var z = 0;
+
+ /* Вращение блока */
+ 
+var k = 0; 
+var timrot = new Array(); 
+ 
+function blockRot()
+{
+ timrot[k] = window.setInterval("Rot();", 20);
+ document.getElementById('numb').innerHTML="Start Rotation("+k+")";
+    
+}
+    
+function Rot() 
+{
+    if(dir == 1) {rot--;} else {rot++;}
+    if(rot == 0) {dir = 0;} 
+    if(rot == 360) {dir = 1;}  
+  document.getElementById('square').style.transform='rotate('+rot+'deg)';
+}
+ 
+function stopRot() 
+{
+  if(k>0){
+     window.clearInterval(timrot[k]);  
+  k--; 
+  document.getElementById('numb').innerHTML="Start Rotation("+k+")";    
+  }
+  
+ 
+}
+
+ /* Изменение цвета блока */
+ 
+function changeColor()
+{
+// alert(m);
+    if(m == 1) timcolor = window.setInterval("Color();", 500);      
+}
+
+function Color()
+{
+    i++;
+    c1 = 'green';
+    c2 = 'red';
+    c3 = 'blue';
+    if(i%2 == 0){c = c2;} 
+     else if(i%3 == 0){c = c3;}
+      else {c = c1;}
+  document.getElementById('square').style.backgroundColor=c;
+}
+    
+function stopChangeColor() 
+{
+  window.clearInterval(timcolor);
+  m = 0;
+  document.getElementById('square').style.backgroundColor="yellow";  
+}
+ /* Таймер в блоке */
+ 
+function blocTim()
+{
+//  alert(n);
+    if(n == 1) timtim = window.setInterval("Tim();", 1000);      
+}
+
+function Tim()
+{
+    timbl++;
+  document.getElementById('square').innerHTML=timbl+' sec';
+}
+    
+function stopTim() 
+{
+  window.clearInterval(timtim);
+  n = 0;  
+}
+
+ /* Сброс всех таймеров */
+
+function nullTim()
+{
+    if( ( (k >0) || (n > 0) ) || (m > 0) && (z == 1))
+ //   if(z == 1)
+    {
+       document.getElementById('alarm').style.display='block';
+       nTim = window.setTimeout("Null();", 3000); 
+       tillres = window.setInterval("countReset();", 1000); 
+    } else { notTim();}       
+}
+
+function notTim()
+{
+ document.getElementById('alarm').style.display='block'; 
+ document.getElementById('alarm').innerHTML='There are no timers!!!';
+ window.setTimeout("stopAlarm();", 1000);
+ document.getElementById('square').style.transform='rotate(0deg)';  
+}
+
+var r = 2;
+function countReset() //остаток времени до сброса
+{
+    document.getElementById('alarm').innerHTML='Resets all of the timers in '+r+' sec!!!';    
+    r--;
+}
+ 
+function Null() //отключаем все таймеры и обнуляем переменные
+{
+ for (i = k; i > 0; i--) stopRot();   
+   rot = 0; 
+   dir = 0;
+   document.getElementById('square').style.transform='rotate('+rot+'deg)'; 
+
+  stopChangeColor();
+    
+  stopTim();
+   timbl = 0;
+   document.getElementById('square').innerHTML=timbl+' sec';
+   
+   document.getElementById('alarm').style.display='none';
+  
+   window.clearTimeout(tillres);
+   document.getElementById('alarm').innerHTML='Resets all of the timers in 3 sec!!!'; 
+   r = 2;
+   z = 0;
+}
+
+//Отменяем сброс всех таймеров
+function stopRes()
+{
+   window.clearTimeout(nTim);
+   document.getElementById('alarm').innerHTML='Cancel Resets!!!';   
+   window.clearTimeout(tillres); 
+   r = 2;
+   z = 0;
+   window.setTimeout("stopAlarm();", 1000);     
+}
+
+function stopAlarm()
+{
+  document.getElementById('alarm').style.display='none'; 
+  document.getElementById('alarm').innerHTML='Resets all of the timers in 3 sec!!!';  
+}
+  
+ </script>
+ 
+</head>
+
+<body>
+	<div class="fix">
+		<div class="header">
+            <h1>Timers</h1>
+        </div>
+        
+		<div class="content">        
+			<div class="leftCol">
+                <ul class="menu">
+        			<li><span id="numb" onclick="k++; blockRot();">
+                        Start Rotation(0)
+                    </span></li>
+        			<li><span onclick="stopRot();">
+                        Stop Rotation
+                    </span></li>
+         			<li><span onclick="m++; changeColor();">
+                        Change Color
+                     </span></li>
+        			<li><span onclick="stopChangeColor();">
+                        Default  Color
+                    </span></li>
+        			<li><span onclick="n++; blocTim();">
+                        Timer in block
+                    </span></li>
+                    <li><span onclick="stopTim();">
+                        Stop Timer in block
+                    </span></li>
+        			<li><span onclick="z++; nullTim();">
+                        Reset  all timers
+                    </span></li>
+                    <li><span onclick="stopRes();">
+                        Stop Reset
+                    </span></li>
+        		</ul>
+            </div>
+            
+			<div class="main">
+                <div id="square"> 0 sec</div>
+            </div>
+            
+            <div id="alarm">
+                Resets all of the timers in 3 sec!!!
+            </div>
+		</div>
+        
+		<div class="footer"></div>
+	</div>
+</body>
+</html>
